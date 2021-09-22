@@ -72,6 +72,7 @@ class ValuationController < ApplicationController
     return 'Full House' if full_house?(sorted_face_value_only_cards_array)
     return 'Flush' if flush?(cards_array)
     return 'Straight' if straight?(sorted_face_value_only_cards_array)
+    return 'Three of a Kind' if three_of_a_kind?(sorted_face_value_only_cards_array)
 
     'No poker hands possible'
   end
@@ -81,7 +82,7 @@ class ValuationController < ApplicationController
   end
 
   def four_of_a_kind?(sorted_face_value_only_cards_array)
-    sorted_face_value_only_cards_array.uniq.length == 2 && sorted_face_value_only_cards_array[1] == sorted_face_value_only_cards_array[3]
+    longest_number_chain(sorted_face_value_only_cards_array) == 4
   end
 
   def full_house?(sorted_face_value_only_cards_array)
@@ -94,5 +95,25 @@ class ValuationController < ApplicationController
 
   def straight?(sorted_face_value_only_cards_array)
     sorted_face_value_only_cards_array.each_cons(2).all? { |first_card, second_card| second_card == first_card + 1 }
+  end
+
+  def three_of_a_kind?(sorted_face_value_only_cards_array)
+    longest_number_chain(sorted_face_value_only_cards_array) == 3
+  end
+
+  def longest_number_chain(array)
+    prev_number = array[0]
+    longest_chain = 0
+    current_chain = 0
+    array.each do |val|
+      if prev_number == val
+        current_chain += 1
+        longest_chain = current_chain if current_chain > longest_chain
+      else
+        current_chain = 1
+      end
+      prev_number = val
+    end
+    longest_chain
   end
 end
