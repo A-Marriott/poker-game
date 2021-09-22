@@ -20,7 +20,7 @@ class ValuationController < ApplicationController
 
     return @response = 'Invalid hand' unless valid_input?(@cards_array)
 
-    @response = 'nice!'
+    @response = rank_hand(@cards_array)
   end
 
   private
@@ -49,5 +49,14 @@ class ValuationController < ApplicationController
 
   def no_duplicates?(cards_array)
     cards_array.length == cards_array.uniq.length
+  end
+
+  def rank_hand(cards_array)
+    return 'Straight Flush' if straight_flush?(cards_array)
+    'nice!'
+  end
+
+  def straight_flush?(cards_array)
+    # all cards must be same suit
   end
 end
