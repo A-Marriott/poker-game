@@ -18,16 +18,14 @@ class ValuationController < ApplicationController
       end
     end
 
-    if validate_input(@cards_array)
-      @response = 'all good'
-    else
-      @response = 'fail'
-    end
+    return @response = 'Invalid hand' unless valid_input?(@cards_array)
+
+    @response = 'nice!'
   end
 
   private
 
-  def validate_input(cards_array)
+  def valid_input?(cards_array)
     return false if cards_array[0] == 'input invalid'
     return false unless correct_number_of_cards?(cards_array)
     return false unless cards_valid?(cards_array)
