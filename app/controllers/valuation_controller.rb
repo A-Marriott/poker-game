@@ -67,12 +67,11 @@ class ValuationController < ApplicationController
 
   def rank_hand(cards_array)
     sorted_face_value_only_cards_array = cards_array.map { |card| @@face_to_number_sequence[card[:face]] }.sort
-    # The order of these functions is important! Many functions rely on logic from ruling out earlier hand possibilities
     return 'Straight Flush' if straight_flush?(cards_array, sorted_face_value_only_cards_array)
     return 'Four of a Kind' if four_of_a_kind?(sorted_face_value_only_cards_array)
     return 'Full House' if full_house?(sorted_face_value_only_cards_array)
-    return 'Flush' if flush?(cards_array)
-    return 'Straight' if straight?(sorted_face_value_only_cards_array)
+    return 'Straight' if straight_without_flush?(cards_array, sorted_face_value_only_cards_array)
+    return 'Flush' if flush_without_straight?(cards_array, sorted_face_value_only_cards_array)
     return 'Three of a Kind' if three_of_a_kind?(sorted_face_value_only_cards_array)
     return 'Two pair' if two_pair?(sorted_face_value_only_cards_array)
     return 'One pair' if one_pair?(sorted_face_value_only_cards_array)
@@ -81,7 +80,7 @@ class ValuationController < ApplicationController
   end
 
   def straight_flush?(cards_array, sorted_face_value_only_cards_array)
-    flush?(cards_array) && straight?(sorted_face_value_only_cards_array)
+    straight?(sorted_face_value_only_cards_array) && flush?(cards_array)
   end
 
   def four_of_a_kind?(sorted_face_value_only_cards_array)
@@ -89,19 +88,27 @@ class ValuationController < ApplicationController
   end
 
   def full_house?(sorted_face_value_only_cards_array)
-    sorted_face_value_only_cards_array.uniq.length == 2
-  end
-
-  def flush?(cards_array)
-    cards_array.all? { |card| card[:suit] == cards_array[0][:suit] }
+    longest_number_chain(sorted_face_value_only_cards_array) == 3 && sorted_face_value_only_cards_array.uniq.length == 2
   end
 
   def straight?(sorted_face_value_only_cards_array)
     sorted_face_value_only_cards_array.each_cons(2).all? { |first_card, second_card| second_card == first_card + 1 }
   end
 
+  def flush?(cards_array)
+    cards_array.all? { |card| card[:suit] == cards_array[0][:suit] }
+  end
+
+  def straight_without_flush?(cards_array, sorted_face_value_only_cards_array)
+    straight?(sorted_face_value_only_cards_array) && !flush?(cards_array)
+  end
+
+  def flush_without_straight?(cards_array, sorted_face_value_only_cards_array)
+    flush?(cards_array) && !straight?(sorted_face_value_only_cards_array)
+  end
+
   def three_of_a_kind?(sorted_face_value_only_cards_array)
-    longest_number_chain(sorted_face_value_only_cards_array) == 3
+    longest_number_chain(sorted_face_value_only_cards_array) == 3 && sorted_face_value_only_cards_array.uniq.length == 3
   end
 
   def two_pair?(sorted_face_value_only_cards_array)
@@ -109,7 +116,7 @@ class ValuationController < ApplicationController
   end
 
   def one_pair?(sorted_face_value_only_cards_array)
-    longest_number_chain(sorted_face_value_only_cards_array) == 2
+    longest_number_chain(sorted_face_value_only_cards_array) == 2 && sorted_face_value_only_cards_array.uniq.length == 4
   end
 
   def longest_number_chain(array)
