@@ -31,8 +31,9 @@ class ValuationController < ApplicationController
     end
 
     return false if cards_array[0] == 'input invalid'
-    # return false unless correct_number_of_cards?(cards_array)
+    return false unless correct_number_of_cards?(cards_array)
     return false unless cards_valid?(cards_array)
+    return false unless no_duplicates?(cards_array)
 
     true
   end
@@ -48,5 +49,9 @@ class ValuationController < ApplicationController
 
       true
     end
+  end
+
+  def no_duplicates?(cards_array)
+    cards_array.length == cards_array.uniq.length
   end
 end
