@@ -1,9 +1,23 @@
 class ValuationController < ApplicationController
   @@valid_faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
   @@valid_suits = ['H', 'D', 'C', 'S']
+  @@face_to_number_sequence = {
+    'A': 1,
+    '2': 2,
+    '3': 3,
+    '4': 4,
+    '5': 5,
+    '6': 6,
+    '7': 7,
+    '8': 8,
+    '9': 9,
+    '10': 10,
+    'J': 11,
+    'Q': 12,
+    'K': 13
+  }
 
-  def input
-  end
+  def input; end
 
   def answer
     @cards = params['response'].strip.upcase
@@ -53,6 +67,7 @@ class ValuationController < ApplicationController
 
   def rank_hand(cards_array)
     return 'Straight Flush' if straight_flush?(cards_array)
+
     'nice!'
   end
 
