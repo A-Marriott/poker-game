@@ -75,8 +75,9 @@ class ValuationController < ApplicationController
     return 'Straight' if straight?(sorted_face_value_only_cards_array)
     return 'Three of a Kind' if three_of_a_kind?(sorted_face_value_only_cards_array)
     return 'Two pair' if two_pair?(sorted_face_value_only_cards_array)
+    return 'One pair' if one_pair?(sorted_face_value_only_cards_array)
 
-    'No poker hands possible'
+    'High card'
   end
 
   def straight_flush?(cards_array, sorted_face_value_only_cards_array)
@@ -105,6 +106,10 @@ class ValuationController < ApplicationController
 
   def two_pair?(sorted_face_value_only_cards_array)
     longest_number_chain(sorted_face_value_only_cards_array) == 2 && sorted_face_value_only_cards_array.uniq.length == 3
+  end
+
+  def one_pair?(sorted_face_value_only_cards_array)
+    longest_number_chain(sorted_face_value_only_cards_array) == 2
   end
 
   def longest_number_chain(array)
