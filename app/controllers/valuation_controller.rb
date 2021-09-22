@@ -6,20 +6,8 @@ class ValuationController < ApplicationController
   end
 
   def answer
-    @cards = params['response']
-    @cards = @cards.strip.upcase
-    if validate_input(@cards)
-      @response = 'all good'
-    else
-      @response = 'fail'
-    end
-  end
-
-  private
-
-  def validate_input(cards)
-    cards_array = cards.split(' ')
-    cards_array.map! do |card|
+    @cards = params['response'].strip.upcase
+    @cards_array = @cards.split(' ').map! do |card|
       case card.length
       when 2
         { face: card[0], suit: card[1] }
@@ -30,6 +18,16 @@ class ValuationController < ApplicationController
       end
     end
 
+    if validate_input(@cards_array)
+      @response = 'all good'
+    else
+      @response = 'fail'
+    end
+  end
+
+  private
+
+  def validate_input(cards_array)
     return false if cards_array[0] == 'input invalid'
     return false unless correct_number_of_cards?(cards_array)
     return false unless cards_valid?(cards_array)
