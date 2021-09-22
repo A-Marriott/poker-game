@@ -1,7 +1,7 @@
 class ValuationController < ApplicationController
   @@valid_faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
   @@valid_suits = ['H', 'D', 'C', 'S']
-  @@face_to_number_sequence = {
+  @@face_to_value_conversion = {
     'A' => 1,
     '2' => 2,
     '3' => 3,
@@ -20,8 +20,8 @@ class ValuationController < ApplicationController
   def input; end
 
   def answer
-    @cards = params['response'].strip.upcase
-    @cards_array = @cards.split(' ').map! do |card|
+    cards = params['response'].strip.upcase
+    @cards_array = cards.split(' ').map! do |card|
       case card.length
       when 2
         { face: card[0], suit: card[1] }
@@ -54,8 +54,8 @@ class ValuationController < ApplicationController
 
   def cards_valid?(cards_array)
     cards_array.all? do |card|
-      return false if @@valid_faces.exclude?(card[:face])
-      return false if @@valid_suits.exclude?(card[:suit])
+      return false unless @@valid_faces.include?(card[:face])
+      return false unless @@valid_suits.include?(card[:suit])
 
       true
     end
@@ -66,7 +66,7 @@ class ValuationController < ApplicationController
   end
 
   def rank_hand(cards_array)
-    sorted_face_value_only_cards_array = cards_array.map { |card| @@face_to_number_sequence[card[:face]] }.sort
+    sorted_face_value_only_cards_array = cards_array.map { |card| @@face_to_value_conversion[card[:face]] }.sort
     return 'Straight Flush' if straight_flush?(cards_array, sorted_face_value_only_cards_array)
     return 'Four of a Kind' if four_of_a_kind?(sorted_face_value_only_cards_array)
     return 'Full House' if full_house?(sorted_face_value_only_cards_array)
