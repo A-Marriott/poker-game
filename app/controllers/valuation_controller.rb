@@ -69,16 +69,20 @@ class ValuationController < ApplicationController
     sorted_face_value_only_cards_array = cards_array.map { |card| @@face_to_number_sequence[card[:face]] }.sort
     return 'Straight Flush' if straight_flush?(cards_array, sorted_face_value_only_cards_array)
     return 'Four of a Kind' if four_of_a_kind?(sorted_face_value_only_cards_array)
+    return 'Full House' if full_house?()
 
     'No poker hands possible'
   end
 
   def straight_flush?(cards_array, sorted_face_value_only_cards_array)
     return false unless cards_array.all? { |card| card[:suit] == cards_array[0][:suit] }
+
     sorted_face_value_only_cards_array.each_cons(2).all? { |first_card, second_card| second_card == first_card + 1 }
   end
 
   def four_of_a_kind?(sorted_face_value_only_cards_array)
-    sorted_face_value_only_cards_array.uniq.length == 2
+    sorted_face_value_only_cards_array.uniq.length == 2 && sorted_face_value_only_cards_array[1] == sorted_face_value_only_cards_array[3]
   end
+
+  def full_house?()
 end
