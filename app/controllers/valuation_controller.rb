@@ -20,7 +20,8 @@ class ValuationController < ApplicationController
   def input; end
 
   def answer
-    cards = params['response'].strip.upcase
+    @thing = 'hey'
+    cards = params['q'].strip.upcase
     @cards_array = cards.split(' ').map! do |card|
       case card.length
       when 2
