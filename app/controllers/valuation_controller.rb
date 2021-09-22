@@ -2,19 +2,19 @@ class ValuationController < ApplicationController
   @@valid_faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
   @@valid_suits = ['H', 'D', 'C', 'S']
   @@face_to_number_sequence = {
-    'A': 1,
-    '2': 2,
-    '3': 3,
-    '4': 4,
-    '5': 5,
-    '6': 6,
-    '7': 7,
-    '8': 8,
-    '9': 9,
-    '10': 10,
-    'J': 11,
-    'Q': 12,
-    'K': 13
+    'A' => 1,
+    '2' => 2,
+    '3' => 3,
+    '4' => 4,
+    '5' => 5,
+    '6' => 6,
+    '7' => 7,
+    '8' => 8,
+    '9' => 9,
+    '10' => 10,
+    'J' => 11,
+    'Q' => 12,
+    'K' => 13
   }
 
   def input; end
@@ -68,10 +68,13 @@ class ValuationController < ApplicationController
   def rank_hand(cards_array)
     return 'Straight Flush' if straight_flush?(cards_array)
 
-    'nice!'
+    'No poker hands possible'
   end
 
   def straight_flush?(cards_array)
-    # all cards must be same suit
+    return false unless cards_array.all? { |card| card[:suit] == cards_array[0][:suit] }
+    face_only_cards_array = cards_array.map { |card| @@face_to_number_sequence[card[:face]] }
+    sorted_face_only_cards_array = face_only_cards_array.sort
+    sorted_face_only_cards_array.each_cons(2).all? { |first_card, second_card| second_card == first_card + 1 }
   end
 end
