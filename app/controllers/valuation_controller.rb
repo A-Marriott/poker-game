@@ -67,12 +67,14 @@ class ValuationController < ApplicationController
 
   def rank_hand(cards_array)
     sorted_face_value_only_cards_array = cards_array.map { |card| @@face_to_number_sequence[card[:face]] }.sort
+    # The order of these functions is important! Many functions rely on logic from ruling out earlier hand possibilities
     return 'Straight Flush' if straight_flush?(cards_array, sorted_face_value_only_cards_array)
     return 'Four of a Kind' if four_of_a_kind?(sorted_face_value_only_cards_array)
     return 'Full House' if full_house?(sorted_face_value_only_cards_array)
     return 'Flush' if flush?(cards_array)
     return 'Straight' if straight?(sorted_face_value_only_cards_array)
     return 'Three of a Kind' if three_of_a_kind?(sorted_face_value_only_cards_array)
+    return 'Two pair' if two_pair?(sorted_face_value_only_cards_array)
 
     'No poker hands possible'
   end
@@ -99,6 +101,10 @@ class ValuationController < ApplicationController
 
   def three_of_a_kind?(sorted_face_value_only_cards_array)
     longest_number_chain(sorted_face_value_only_cards_array) == 3
+  end
+
+  def two_pair?(sorted_face_value_only_cards_array)
+    longest_number_chain(sorted_face_value_only_cards_array) == 2 && sorted_face_value_only_cards_array.uniq.length == 3
   end
 
   def longest_number_chain(array)
