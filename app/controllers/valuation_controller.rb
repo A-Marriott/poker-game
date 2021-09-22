@@ -70,6 +70,7 @@ class ValuationController < ApplicationController
     return 'Straight Flush' if straight_flush?(cards_array, sorted_face_value_only_cards_array)
     return 'Four of a Kind' if four_of_a_kind?(sorted_face_value_only_cards_array)
     return 'Full House' if full_house?(sorted_face_value_only_cards_array)
+    return 'Flush' if flush?(cards_array)
 
     'No poker hands possible'
   end
@@ -86,5 +87,9 @@ class ValuationController < ApplicationController
 
   def full_house?(sorted_face_value_only_cards_array)
     sorted_face_value_only_cards_array.uniq.length == 2
+  end
+
+  def flush?(cards_array)
+    cards_array.all? { |card| card[:suit] == cards_array[0][:suit] }
   end
 end
