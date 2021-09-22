@@ -3,5 +3,6 @@ class ValuationController < ApplicationController
   end
 
   def answer
+    @response = params["response"]
   end
 end
