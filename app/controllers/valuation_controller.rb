@@ -21,7 +21,7 @@ class ValuationController < ApplicationController
 
   def answer
     cards = params['q'].strip.upcase
-    @cards_array = cards.split(' ').map! do |card|
+    @cards_array = cards.split(' ').map do |card|
       case card.length
       when 2
         { face: card[0], suit: card[1] }
