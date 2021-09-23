@@ -20,13 +20,24 @@ describe ValuationController do
         expect(subject.send(:correct_number_of_cards?, [0, 0])).to be false
       end
     end
+
+    describe '#cards_valid?' do
+      it 'should return true when passed an array of strings containing valid card-face combinations' do
+        ary = []
+        ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'].each do |face|
+          ['H', 'D', 'C', 'S'].each do |suit|
+            ary << { face: face, suit: suit }
+          end
+        end
+        expect(subject.send(:cards_valid?, ary)).to be true
+      end
+
+      it 'should return false when passed an array of random objects' do
+        expect(subject.send(:cards_valid?, [{ face: 'hello', suit: 'word' }, { face: 'goodbye', suit: 'another word' }])).to be false
+      end
+    end
   end
 end
-
-#   correct_number_of_cards?(cards_array)
-
-# returns true if 5 array elements passed
-# returns false if not 5
 
 #  cards_valid?(cards_array)
 
