@@ -36,13 +36,19 @@ describe ValuationController do
         expect(subject.send(:cards_valid?, [{ face: 'hello', suit: 'word' }, { face: 'goodbye', suit: 'another word' }])).to be false
       end
     end
+
+    describe '#no_duplicates?' do
+      it 'should return true when passed an array without duplicates' do
+        expect(subject.send(:no_duplicates?, [1, 2, 3])).to be true
+      end
+
+      it 'should return false when passed an array with duplicates' do
+        expect(subject.send(:no_duplicates?, [1, 2, 2])).to be false
+      end
+    end
   end
 end
 
-#  cards_valid?(cards_array)
-
-# every combination of card and face to be valid
-# a random string to return false
 
 #   def no_duplicates?(cards_array)
 #     cards_array.length == cards_array.uniq.length
