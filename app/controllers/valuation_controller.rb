@@ -25,6 +25,8 @@ class ValuationController < ApplicationController
       case card.length
       when 2
         { face: card[0], suit: card[1] }
+        # handles the edge case where 10 is input as face, meaning we can't use the first index only
+        # incorrect values are filtered out later in the cards_valid? function
       when 3
         { face: card[0..1], suit: card[2] }
       else
@@ -66,7 +68,9 @@ class ValuationController < ApplicationController
   end
 
   def rank_hand(cards_array)
+    # Many functions only need the sorted face value of the card - we extract this to its own, simpler array
     sorted_face_value_only_cards_array = cards_array.map { |card| @@face_to_value_conversion[card[:face]] }.sort
+    # The order of these is important - we check from most valued to least valued hands, stopping if we get a match
     return 'Straight Flush' if straight_flush?(cards_array, sorted_face_value_only_cards_array)
     return 'Four of a Kind' if four_of_a_kind?(sorted_face_value_only_cards_array)
     return 'Full House' if full_house?(sorted_face_value_only_cards_array)
@@ -91,6 +95,7 @@ class ValuationController < ApplicationController
     longest_number_chain(sorted_face_value_only_cards_array) == 3 && sorted_face_value_only_cards_array.uniq.length == 2
   end
 
+  # The or statement handles the edge case of ace being low
   def straight?(sorted_face_value_only_cards_array)
     sorted_face_value_only_cards_array.each_cons(2).all? { |first_card, second_card| second_card == first_card + 1 } || sorted_face_value_only_cards_array == [1, 2, 3, 4, 5]
   end
@@ -99,6 +104,7 @@ class ValuationController < ApplicationController
     cards_array.all? { |card| card[:suit] == cards_array[0][:suit] }
   end
 
+  # We need to know whether a flush is excluded, otherwise testing just for a straight could mean either a straight flush or a straight
   def straight_without_flush?(cards_array, sorted_face_value_only_cards_array)
     straight?(sorted_face_value_only_cards_array) && !flush?(cards_array)
   end
