@@ -54,25 +54,35 @@ describe ValuationController do
       end
     end
   end
+
+  context 'hand ranking methods' do
+    describe '#longest_number_chain' do
+      it 'should return an integer containing the longest number of consecutive numbers in a presorted array' do
+        expect(subject.send(:longest_number_chain, [1, 1, 2, 2, 2, 3, 100])).to eq(3)
+      end
+    end
+
+    describe '#four_of_a_kind?' do
+      it 'should return true when 4 of the 5 elements in an presorted array match' do
+        expect(subject.send(:four_of_a_kind?, [10, 10, 10, 10, 20])).to be true
+      end
+
+      it 'should return false when less there is no match of 4 elements in a presorted array' do
+        expect(subject.send(:four_of_a_kind?, [1, 2, 2, 2, 5])).to be false
+      end
+    end
+
+    describe '#full_house?' do
+      it 'should return true when three elements of a presorted array match, and the other two elements match' do
+        expect(subject.send(:full_house?, [2, 2, 2, 3, 3])).to be true
+      end
+
+      it 'should return false when three elements of a presorted array match, and the other two elements do not match' do
+        expect(subject.send(:full_house?, [2, 2, 2, 3, 4])).to be false
+      end
+    end
+  end
 end
-
-# valid_input?(cards_array)
-
-# should return true when passed an array of 5 unique elements, each being a string referring to face and card (make it random)
-
-# should return false when passed a random array
-
-
-
-
-#   def longest_number_chain(array)
-
-# Should return an integer containing the longest number of consecutive numbers in the array
-
-#   def four_of_a_kind?(sorted_face_value_only_cards_array)
-
-# Should return true when 4 of the five elements of a number array match
-# Should return false when less than 4 elements match
 
 #   def full_house?(sorted_face_value_only_cards_array)
 
