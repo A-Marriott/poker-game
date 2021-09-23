@@ -111,6 +111,20 @@ describe ValuationController do
         expect(subject.send(:straight_flush?, cards_ary, numbers_ary)).to be true
       end
     end
+
+    describe '#three_of_a_kind?' do
+      it 'should return true if a presorted array contains three matching elements and two unique other elements' do
+        expect(subject.send(:three_of_a_kind?, [3, 3, 3, 4, 10])).to be true
+      end
+
+      it 'should return false if a presorted array contains three matching elements and two matching other elements' do
+        expect(subject.send(:three_of_a_kind?, [3, 3, 3, 4, 4])).to be false
+      end
+
+      it 'should return false if a presorted array contains less than three matching elements' do
+        expect(subject.send(:three_of_a_kind?, [2, 3, 3, 4, 4])).to be false
+      end
+    end
   end
 end
 
