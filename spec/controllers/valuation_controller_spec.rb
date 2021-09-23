@@ -135,26 +135,23 @@ describe ValuationController do
         expect(subject.send(:two_pair?, [2, 2, 3, 4, 5])).to be false
       end
     end
+
+    describe '#one_pair?' do
+      it 'should return true if a presorted array contains one match of two elements, and the other three elements are unique' do
+        expect(subject.send(:one_pair?, [2, 2, 3, 4, 5])).to be true
+      end
+    end
+  end
+
+  context 'get answer' do
+    it 'returns Invalid hand if a random string is passed' do
+      get 'answer', params: { q: 'hello' }
+      assert_equal 'Invalid hand', assigns(:response)
+    end
+
+    it 'returns Straight FLush if a string of 5 cards worth a straight flush is entered' do
+      get 'answer', params: { q: '8C 9C 10C JC QC' }
+      assert_equal 'Straight Flush', assigns(:response)
+    end
   end
 end
-
-#   def one_pair?(sorted_face_value_only_cards_array)
-
-# true if one match of two elements and other three elements are unique
-
-#   def rank_hand(cards_array)
-#     sorted_face_value_only_cards_array = cards_array.map { |card| @@face_to_value_conversion[card[:face]] }.sort
-#     return 'Straight Flush' if straight_flush?(cards_array, sorted_face_value_only_cards_array)
-#     return 'Four of a Kind' if four_of_a_kind?(sorted_face_value_only_cards_array)
-#     return 'Full House' if full_house?(sorted_face_value_only_cards_array)
-#     return 'Straight' if straight_without_flush?(cards_array, sorted_face_value_only_cards_array)
-#     return 'Flush' if flush_without_straight?(cards_array, sorted_face_value_only_cards_array)
-#     return 'Three of a Kind' if three_of_a_kind?(sorted_face_value_only_cards_array)
-#     return 'Two pair' if two_pair?(sorted_face_value_only_cards_array)
-#     return 'One pair' if one_pair?(sorted_face_value_only_cards_array)
-
-#     'High card'
-#   end
-
-# should return a string
-# Should return
