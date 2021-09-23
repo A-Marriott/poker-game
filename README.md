@@ -33,3 +33,11 @@ Once the server is up and running, you should now be able to navigate to the fol
 <http://localhost:3000/input>
 
 Type a poker hand into the input box, following the format given (for example, 'JH 5D 5C JS 5S'). You will see the best poker rank available from that hand. Enjoy!
+
+## Testing
+
+A number of unit tests have been written for this app. The tests can be found in the spec folder. In order to run these tests, run the following command:
+
+```bash
+rake
+```
