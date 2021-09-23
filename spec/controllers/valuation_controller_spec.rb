@@ -125,19 +125,18 @@ describe ValuationController do
         expect(subject.send(:three_of_a_kind?, [2, 3, 3, 4, 4])).to be false
       end
     end
+
+    describe '#two_pair?' do
+      it 'should return true if a presorted array contains two matches of two elements, and the final element is unique' do
+        expect(subject.send(:two_pair?, [2, 2, 3, 3, 5])).to be true
+      end
+
+      it 'should return false if a presorted array contains one matches of two elements, and the final three elements are unique' do
+        expect(subject.send(:two_pair?, [2, 2, 3, 4, 5])).to be false
+      end
+    end
   end
 end
-
-#   def three_of_a_kind?(sorted_face_value_only_cards_array)
-
-# return true if one matche of three elements and other two elements are unique
-# return false if not three matches
-# return false if three matches and other two elements are the same
-
-#   def two_pair?(sorted_face_value_only_cards_array)
-
-# true if two matches of two elements each and final element is unique
-# false if one match of two elements
 
 #   def one_pair?(sorted_face_value_only_cards_array)
 
