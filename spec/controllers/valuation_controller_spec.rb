@@ -81,38 +81,38 @@ describe ValuationController do
         expect(subject.send(:full_house?, [2, 2, 2, 3, 4])).to be false
       end
     end
+
+    describe '#straight?' do
+      it 'should return true when a consecutive presorted array of numbers is passed' do
+        expect(subject.send(:straight?, [7, 8, 9, 10, 11])).to be true
+      end
+
+      it 'should return false when a non-consecutive presorted array of numbers is passed' do
+        expect(subject.send(:straight?, [7, 8, 9, 10, 10])).to be false
+      end
+    end
+
+    describe '#flush?' do
+      it 'should return true when passed an array of objects with matching suit values' do
+        ary = [{ face: 'A', suit: 'H' }, { face: 'J', suit: 'H' }, { face: '5', suit: 'H' }, { face: '10', suit: 'H' }, { face: '2', suit: 'H' }]
+        expect(subject.send(:flush?, ary)).to be true
+      end
+
+      it 'should return false when passed an array of objects without matching suit values' do
+        ary = [{ face: 'A', suit: 'H' }, { face: 'J', suit: 'H' }, { face: '5', suit: 'H' }, { face: '10', suit: 'C' }, { face: '2', suit: 'H' }]
+        expect(subject.send(:flush?, ary)).to be false
+      end
+    end
+
+    describe '#straight_flush?' do
+      it 'should return true if all elements of a numbers array match, and when passed an array of objects with matching suit values' do
+        cards_ary = [{ face: 'A', suit: 'H' }, { face: 'J', suit: 'H' }, { face: '5', suit: 'H' }, { face: '10', suit: 'H' }, { face: '2', suit: 'H' }]
+        numbers_ary = [3, 4, 5, 6, 7]
+        expect(subject.send(:straight_flush?, cards_ary, numbers_ary)).to be true
+      end
+    end
   end
 end
-
-#   def full_house?(sorted_face_value_only_cards_array)
-
-# Should return true when three elements of an array match, and the other two elements match
-
-# Should return false when three elements of an arrya match and the other two elements do not match
-
-#   def straight?(sorted_face_value_only_cards_array)
-
-# Should return true when consecutive array of numbers is passed
-# false if non consecutive
-
-#   def flush?(cards_array)
-
-# Should return true when all values of an array of objects with key suit match
-# false if not match
-
-#   def straight_without_flush?(cards_array, sorted_face_value_only_cards_array)
-
-# Should return true if all elements of a numbers array are consectuive but the suits do not match
-
-# Should return false if numbers are consecutive and suits match
-
-#   def straight_flush?(cards_array, sorted_face_value_only_cards_array)
-
-# Should return true if all elements of a numbers array are consectuive and the suits  match
-
-#   def flush_without_straight?(cards_array, sorted_face_value_only_cards_array)
-#     flush?(cards_array) && !straight?(sorted_face_value_only_cards_array)
-#   end
 
 #   def three_of_a_kind?(sorted_face_value_only_cards_array)
 
