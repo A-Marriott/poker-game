@@ -46,16 +46,15 @@ describe ValuationController do
         expect(subject.send(:no_duplicates?, [1, 2, 2])).to be false
       end
     end
+
+    describe '#valid_input?' do
+      it 'should return true when passed an array of objects containing 5 combinations of valid face-card combination' do
+        ary = [{ face: 'A', suit: 'H' }, { face: 'J', suit: 'S' }, { face: '5', suit: 'D' }, { face: '10', suit: 'C' }, { face: 'J', suit: 'H' }]
+        expect(subject.send(:valid_input?, ary)).to be true
+      end
+    end
   end
 end
-
-
-#   def no_duplicates?(cards_array)
-#     cards_array.length == cards_array.uniq.length
-#   end
-
-# an array with differing elements to return true
-# an array with at least one duplicate element to return false
 
 # valid_input?(cards_array)
 
