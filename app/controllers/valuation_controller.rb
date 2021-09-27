@@ -42,7 +42,7 @@ class ValuationController < ApplicationController
   private
 
   def valid_input?(cards_array)
-    return false if cards_array[0] == 'input invalid'
+    return false if cards_array.any? { |card| card == 'input invalid' }
     return false unless correct_number_of_cards?(cards_array)
     return false unless cards_valid?(cards_array)
     return false unless no_duplicates?(cards_array)
