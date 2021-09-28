@@ -2,20 +2,8 @@ class ValuationController < ApplicationController
   def input; end
 
   def answer
-    init_card_info
-    cards = params['poker_hand'].strip.upcase
-    @cards_array = cards.split(' ').map do |card|
-      case card.length
-      when 2
-        { face: card[0], suit: card[1] }
-        # handles the edge case where 10 is input as face, meaning we can't use the first index only
-        # incorrect values are filtered out later in the cards_valid? function
-      when 3
-        { face: card[0..1], suit: card[2] }
-      else
-        'input invalid'
-      end
-    end
+    init_deck_of_cards_info
+    init_cards(params['poker_hand'].strip.upcase)
 
     return @response = 'Invalid hand' unless valid_input?
 
@@ -24,7 +12,7 @@ class ValuationController < ApplicationController
 
   private
 
-  def init_card_info
+  def init_deck_of_cards_info
     @valid_faces = %w[A 2 3 4 5 6 7 8 9 10 J Q K]
     @valid_suits = %w[H D C S]
     @face_to_value_conversion = {
@@ -42,6 +30,24 @@ class ValuationController < ApplicationController
       'K' => 13,
       'A' => 14
     }
+  end
+
+  def init_cards(cards)
+    @cards_array = cards.split(' ').map do |card|
+      case card.length
+      when 2
+        { face: card[0], suit: card[1] }
+        # handles the edge case where 10 is input as face, meaning we can't use the first index only
+        # incorrect values are filtered out later in the cards_valid? function
+      when 3
+        { face: card[0..1], suit: card[2] }
+      else
+        'input invalid'
+      end
+    end
+
+    # Many functions only need the sorted face value of the card - we extract this to its own, simpler array
+    @sorted_face_value_only_cards_array = @cards_array.map { |card| @face_to_value_conversion[card[:face]] }.sort
   end
 
   def valid_input?
@@ -72,8 +78,6 @@ class ValuationController < ApplicationController
   end
 
   def rank_hand
-    # Many functions only need the sorted face value of the card - we extract this to its own, simpler array
-    @sorted_face_value_only_cards_array = @cards_array.map { |card| @face_to_value_conversion[card[:face]] }.sort
     # The order of these is important - we check from most valued to least valued hands, stopping if we get a match
     return 'Straight Flush' if straight_flush?
     return 'Four of a Kind' if four_of_a_kind?
