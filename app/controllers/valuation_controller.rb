@@ -71,6 +71,9 @@ class ValuationController < ApplicationController
   end
 
   def rank_hand
+    find_greatest_number_matching_faces
+    find_unique_card_faces
+
     # The order of these is important - we check from most valued to least valued hands, stopping if we get a match
     return 'Straight Flush' if straight_flush?
     return 'Four of a Kind' if four_of_a_kind?
@@ -89,11 +92,11 @@ class ValuationController < ApplicationController
   end
 
   def four_of_a_kind?
-    longest_number_chain == 4
+    @greatest_number_matching_faces == 4
   end
 
   def full_house?
-    longest_number_chain == 3 && @sorted_face_value_only_cards_array.uniq.length == 2
+    @greatest_number_matching_faces == 3 && @unique_card_faces == 2
   end
 
   # The or statement handles the edge case of ace being low
@@ -115,18 +118,18 @@ class ValuationController < ApplicationController
   end
 
   def three_of_a_kind?
-    longest_number_chain == 3 && @sorted_face_value_only_cards_array.uniq.length == 3
+    @greatest_number_matching_faces == 3 && @unique_card_faces == 3
   end
 
   def two_pair?
-    longest_number_chain == 2 && @sorted_face_value_only_cards_array.uniq.length == 3
+    @greatest_number_matching_faces == 2 && @unique_card_faces == 3
   end
 
   def one_pair?
-    longest_number_chain == 2 && @sorted_face_value_only_cards_array.uniq.length == 4
+    @greatest_number_matching_faces == 2 && @unique_card_faces == 4
   end
 
-  def longest_number_chain
+  def find_greatest_number_matching_faces
     prev_number = @sorted_face_value_only_cards_array[0]
     longest_chain = 0
     current_chain = 0
@@ -139,7 +142,11 @@ class ValuationController < ApplicationController
       end
       prev_number = val
     end
-    longest_chain
+    @greatest_number_matching_faces = longest_chain
+  end
+
+  def find_unique_card_faces
+    @unique_card_faces = @sorted_face_value_only_cards_array.uniq.length
   end
 end
 
