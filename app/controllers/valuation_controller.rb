@@ -71,8 +71,8 @@ class ValuationController < ApplicationController
   end
 
   def rank_hand
-    find_greatest_number_matching_faces
-    find_unique_card_faces
+    calculate_greatest_number_matching_faces
+    calculate_unique_card_faces
 
     # The order of these is important - we check from most valued to least valued hands, stopping if we get a match
     return 'Straight Flush' if straight_flush?
@@ -129,27 +129,11 @@ class ValuationController < ApplicationController
     @greatest_number_matching_faces == 2 && @unique_card_faces == 4
   end
 
-  def find_greatest_number_matching_faces
-    prev_number = @sorted_face_value_only_cards_array[0]
-    longest_chain = 0
-    current_chain = 0
-    @sorted_face_value_only_cards_array.each do |val|
-      if prev_number == val
-        current_chain += 1
-        longest_chain = current_chain if current_chain > longest_chain
-      else
-        current_chain = 1
-      end
-      prev_number = val
-    end
-    @greatest_number_matching_faces = longest_chain
+  def calculate_greatest_number_matching_faces
+    @greatest_number_matching_faces = @sorted_face_value_only_cards_array.uniq.map { |n| @sorted_face_value_only_cards_array.count(n) }.max
   end
 
-  def find_unique_card_faces
+  def calculate_unique_card_faces
     @unique_card_faces = @sorted_face_value_only_cards_array.uniq.length
   end
 end
-
-# already gotten rid of @ problems
-# but I keep calling the same method, I should just call longest number chain and uniq length once and know without having to re call
-
