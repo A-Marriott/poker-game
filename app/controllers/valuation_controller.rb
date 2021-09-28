@@ -25,8 +25,8 @@ class ValuationController < ApplicationController
   private
 
   def init_card_info
-    @valid_faces = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
-    @valid_suits = ['H', 'D', 'C', 'S']
+    @valid_faces = %w[A 2 3 4 5 6 7 8 9 10 J Q K]
+    @valid_suits = %w[H D C S]
     @face_to_value_conversion = {
       '2' => 2,
       '3' => 3,
