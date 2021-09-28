@@ -45,7 +45,6 @@ class ValuationController < ApplicationController
   end
 
   def valid_input?(cards_array)
-    return false if cards_array.any? { |card| card == 'input invalid' }
     return false unless correct_number_of_cards?(cards_array)
     return false unless cards_valid?(cards_array)
     return false unless no_duplicates?(cards_array)
@@ -58,6 +57,8 @@ class ValuationController < ApplicationController
   end
 
   def cards_valid?(cards_array)
+    return false if cards_array.any? { |card| card == 'input invalid' }
+
     cards_array.all? do |card|
       return false unless @valid_faces.include?(card[:face])
       return false unless @valid_suits.include?(card[:suit])
