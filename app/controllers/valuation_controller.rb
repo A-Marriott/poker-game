@@ -3,7 +3,7 @@ class ValuationController < ApplicationController
 
   def answer
     init_card_info
-    cards = params['q'].strip.upcase
+    cards = params['poker_hand'].strip.upcase
     @cards_array = cards.split(' ').map do |card|
       case card.length
       when 2
