@@ -30,7 +30,7 @@ rails s
 
 Once the server is up and running, you should now be able to navigate to the following webpage:
 
-<http://localhost:3000/input>
+<http://localhost:3000>
 
 Type a poker hand into the input box, following the format given (for example, 'JH 5D 5C JS 5S'). You will see the best poker rank available from that hand. Enjoy!
 
