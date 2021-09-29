@@ -72,7 +72,7 @@ class ValuationController < ApplicationController
 
   def rank_hand
     calculate_greatest_number_matching_faces
-    calculate_unique_card_faces
+    calculate_unique_faces
 
     # The order of these is important - we check from most valued to least valued hands, stopping if we get a match
     return 'Straight Flush' if straight_flush?
@@ -96,7 +96,7 @@ class ValuationController < ApplicationController
   end
 
   def full_house?
-    @greatest_number_matching_faces == 3 && @unique_card_faces == 2
+    @greatest_number_matching_faces == 3 && @unique_faces == 2
   end
 
   # The or statement handles the edge case of ace being low
@@ -118,22 +118,22 @@ class ValuationController < ApplicationController
   end
 
   def three_of_a_kind?
-    @greatest_number_matching_faces == 3 && @unique_card_faces == 3
+    @greatest_number_matching_faces == 3 && @unique_faces == 3
   end
 
   def two_pair?
-    @greatest_number_matching_faces == 2 && @unique_card_faces == 3
+    @greatest_number_matching_faces == 2 && @unique_faces == 3
   end
 
   def one_pair?
-    @greatest_number_matching_faces == 2 && @unique_card_faces == 4
+    @greatest_number_matching_faces == 2 && @unique_faces == 4
   end
 
   def calculate_greatest_number_matching_faces
-    @greatest_number_matching_faces = @sorted_face_value_only_cards_array.uniq.map { |n| @sorted_face_value_only_cards_array.count(n) }.max
+    @greatest_number_matching_faces = @sorted_face_value_only_cards_array.uniq.map { |val| @sorted_face_value_only_cards_array.count(val) }.max
   end
 
-  def calculate_unique_card_faces
-    @unique_card_faces = @sorted_face_value_only_cards_array.uniq.length
+  def calculate_unique_faces
+    @unique_faces = @sorted_face_value_only_cards_array.uniq.length
   end
 end
